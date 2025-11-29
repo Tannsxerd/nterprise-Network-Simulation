@@ -4,7 +4,6 @@
 project นี้จำลองการออกแบบ enterprise-Network ขนาดกลาง โดยใช้ความรู้ fundamental-network มาประยุกต์ใช้ เช่น Vlan , routing , DHCP(แจก ip) , และ config Nat เพื่อให้ enterprise สามารถออก internet ได้
 
 ## Network Topology
-![Network Topology]
 <img width="848" height="538" alt="image" src="https://github.com/user-attachments/assets/56412bce-7e5d-4323-9fe7-00dbfab1a9b5" />
 
 ## Key Features & Configurations
@@ -12,29 +11,29 @@ project นี้จำลองการออกแบบ enterprise-Network �
 ### 1. VLAN Segmentation
 มีการแบ่ง VLAN เพื่อแยก Traffic ของแต่ละแผนกออกจากกัน ลดขนาด broad-cast เพิ่มความปลอดภัย Segmentation เพื่อลด surface และ จำกัดความเสียหายเมื่อถูกโจมตี:
 - **VLAN 10 (HR):** แผนกบุคคล (192.168.10.0/24)
-- **VLAN 20 (Sales):**ฝ่ายขาย (192.168.20.0/24)
+- **VLAN 20 (Sales):** ฝ่ายขาย (192.168.20.0/24)
 - **VLAN 99 (IT/Admin):** แผนกIT/ผู้ดูแล (192.168.99.0/24)
   
 !Config Switch 
 ! Create VLANs
 vlan 10
- name HRdepartment
+name HRdepartment
 vlan 20
- name SalesDepartmment
+name SalesDepartmment
 vlan 99
- name IT/admin
+name IT/admin
 
 ! Configure Access Ports Vlan10,20,99 (switch ต่อกับ pc หรือ endpoint)
 Example:
 interface FastEthernet0/1
- switchport mode access
- switchport access vlan 10
+switchport mode access
+switchport access vlan 10
 
 ! Configure Trunk Port (switch ต่อกับ enterprise-router)
 เพื่อให้ Vlan สามารถคุยกันได้ โดยการใส่ VLAN Tag (IEEE 802.1Q) ของแต่ vlan เข้าไป ทำให้รู้ว่า frame ไหน มาจาก vlan ไหน และ ลดจำนวนสายที่ต้องใช้
 Example:
 interface GigabitEthernet0/1
- switchport mode trunk
+switchport mode trunk
 _____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 ### 2. Routing & Connectivity
@@ -42,13 +41,13 @@ ________________________________________________________________________________
 - **Static Routing:**  ตั้ง defalut route ของ enterprise-router  เพื่อ route ไปยัง ISP.
 ! Physical Interface
 interface GigabitEthernet0/0
- no shutdown
+no shutdown
 ! Configure Router-on-a-Stick
 Ex.config HR 
 ! Sub-interface for HR (VLAN 10)
 interface GigabitEthernet0/0.10
- encapsulation dot1q 10
- ip address 192.168.10.1 255.255.255.0
+encapsulation dot1q 10
+ip address 192.168.10.1 255.255.255.0
 _____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 
@@ -80,13 +79,13 @@ ip nat inside
 interface GigabitEthernet0/1 ip nat outside
 
 3. สร้าง Access List (ACL) เพื่อระบุ Scope ว่า IP วงไหนได้รับอนุญาตให้ทำ NAT บ้าง
-   access-list 1 permit 192.168.0.0 0.0.255.255 **ง่ายๆคือ 192.168.x.x**
+access-list 1 permit 192.168.0.0 0.0.255.255 **ง่ายๆคือ 192.168.x.x**
 
 4. สั่ง Map source list เข้ากับขา Outside โดยใช้คำสั่ง overload
-   ip nat inside source list 1 interface GigabitEthernet0/1 overload
+ip nat inside source list 1 interface GigabitEthernet0/1 overload
 
 5. กำหนด Default Route (ชี้ทางออกไปหา Router ISP เพื่อให้ Traffic ที่ไม่รู้จักส่งออกไปข้างนอก)
-   ip route 0.0.0.0 0.0.0.0 200.1.1.1
+ip route 0.0.0.0 0.0.0.0 200.1.1.1
 ____________________________________________________________________________________________________________________________________________________________________________________________________________________
 
 ## 💻 Tech Stack
