@@ -38,7 +38,7 @@ switchport mode trunk
 
 
 
-###2. Routing & Connectivity
+### 2. Routing & Connectivity
 - Router-on-a-Stick: ตั้งค่า sub-interface ของ router เพื่อให้ vlan สามารถสื่อสารกันได้ ผ่าน interface เดียว
 - Static Routing: ตั้ง default route ของ enterprise-router เพื่อ route ไปยัง ISP
 Physical Interface
@@ -53,7 +53,7 @@ ip address 192.168.10.1 255.255.255.0
 
 
 
-###3. IP Management (DHCP)
+### 3. IP Management (DHCP)
 - ใช้งาน DHCP Server บน Enterprise-Router เพื่อแจก IP Address, Subnet Mask และ Default Gateway ให้อุปกรณ์ Endpoint แบบอัตโนมัติ
 - ลดภาระ Admin ไม่ต้องไล่ config ทีละเครื่อง (Scalability) และป้องกันปัญหา IP Conflict (Human Error)
 Config DHCP Server
@@ -63,7 +63,7 @@ default-router 192.168.10.1
 
 
 
-###4. Internet Access (NAT/PAT)
+### 4. Internet Access (NAT/PAT)
 - Implemented NAT Overload (PAT) โดยการ Map Private IP จำนวนมากจากภายในองค์กร ให้สามารถออกไปใช้อินเทอร์เน็ตผ่าน Public IP เพียงตัวเดียว
 - ใช้หมายเลข Port ในการแยก Session (Port Address Translation) ช่วยประหยัด Public IP Address และซ่อน Topology ภายในจากโลกภายนอก
 Config NAT Overload ที่ Enterprise-Router
